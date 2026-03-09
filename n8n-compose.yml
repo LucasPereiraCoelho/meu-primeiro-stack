@@ -24,7 +24,7 @@ services:
 
   n8n_editor:
     image: n8nio/n8n:1.122.5
-    command: n8n start
+    command: start
     ports:
       - "5678:5678"
     environment:
@@ -68,7 +68,7 @@ services:
 
   n8n_webhook:
     image: n8nio/n8n:1.122.5
-    command: n8n webhook
+    command: webhook
     environment:
       DB_TYPE: postgresdb
       DB_POSTGRESDB_DATABASE: n8n-prod
@@ -109,7 +109,7 @@ services:
 
   n8n_worker:
     image: n8nio/n8n:1.122.5
-    command: "n8n worker --concurrency=5"
+    command: "worker --concurrency=5"
     environment:
       DB_TYPE: postgresdb
       DB_POSTGRESDB_DATABASE: n8n-prod
