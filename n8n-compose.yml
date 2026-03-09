@@ -1,4 +1,5 @@
 version: "3.8"
+N8N_SECURE_COOKIE: "false"
 
 services:
   n8n_postgres:
