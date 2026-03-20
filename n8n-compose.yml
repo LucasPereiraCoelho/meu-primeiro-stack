@@ -25,8 +25,6 @@ services:
   n8n_editor:
     image: n8nio/n8n:1.122.5
     command: start
-    ports:
-      - "5678:5678"
     environment:
       DB_TYPE: postgresdb
       DB_POSTGRESDB_DATABASE: n8n-prod
@@ -45,10 +43,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: automations.prologapp.com
+      N8N_HOST: internal.n8n.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://automations.prologapp.com/"
-      WEBHOOK_URL: "https://automations.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
+      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales,crypto-js,jszip"
       N8N_LOG_LEVEL: debug
@@ -56,16 +54,27 @@ services:
       N8N_LOG_FILE_LOCATION: /home/node/.n8n/logs/n8n-01.log
       N8N_DEFAULT_BINARY_DATA_MODE: filesystem
       N8N_BINARY_DATA_STORAGE_PATH: /home/node/.n8n/binaryData
-      N8N_SECURE_COOKIE: "false"
     volumes:
       - n8n_editor_data:/home/node/.n8n
       - n8n_binary_data:/home/node/.n8n/binaryData
+    networks:
+      - n8n_net
+      - traefik
     depends_on:
       - n8n_postgres
       - redis_n8n
-    networks:
-      - n8n_net
-    restart: unless-stopped
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: any
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=traefik
+        - traefik.http.routers.n8n-editor.rule=Host(`internal.n8n.prologapp.com`)
+        - traefik.http.routers.n8n-editor.entrypoints=websecure
+        - traefik.http.routers.n8n-editor.tls=true
+        - traefik.http.routers.n8n-editor.tls.certresolver=le
+        - traefik.http.services.n8n-editor.loadbalancer.server.port=5678
 
   n8n_webhook:
     image: n8nio/n8n:1.122.5
@@ -88,10 +97,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: automations.prologapp.com
+      N8N_HOST: internal.n8n.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://automations.prologapp.com/"
-      WEBHOOK_URL: "https://automations.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
+      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales"
       N8N_LOG_LEVEL: debug
@@ -101,11 +110,11 @@ services:
     volumes:
       - n8n_webhook_data:/home/node/.n8n
       - n8n_binary_data:/home/node/.n8n/binaryData
+    networks:
+      - n8n_net
     depends_on:
       - n8n_postgres
       - redis_n8n
-    networks:
-      - n8n_net
     restart: unless-stopped
 
   n8n_worker:
@@ -129,10 +138,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: automations.prologapp.com
+      N8N_HOST: internal.n8n.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://automations.prologapp.com/"
-      WEBHOOK_URL: "https://automations.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
+      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales,crypto-js,jszip"
       N8N_LOG_LEVEL: debug
@@ -142,11 +151,11 @@ services:
     volumes:
       - n8n_worker_data:/home/node/.n8n
       - n8n_binary_data:/home/node/.n8n/binaryData
+    networks:
+      - n8n_net
     depends_on:
       - n8n_postgres
       - redis_n8n
-    networks:
-      - n8n_net
     restart: unless-stopped
 
 volumes:
@@ -160,3 +169,5 @@ volumes:
 networks:
   n8n_net:
     driver: overlay
+  traefik:
+    external: true
