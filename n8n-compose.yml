@@ -43,10 +43,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: internal.n8n.prologapp.com
+      N8N_HOST: n8n.internal.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
-      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://n8n.internal.prologapp.com/"
+      WEBHOOK_URL: "https://n8n.internal.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales,crypto-js,jszip"
       N8N_LOG_LEVEL: debug
@@ -70,7 +70,7 @@ services:
       labels:
         - traefik.enable=true
         - traefik.docker.network=traefik
-        - traefik.http.routers.n8n-editor.rule=Host(`internal.n8n.prologapp.com`)
+        - traefik.http.routers.n8n-editor.rule=Host(`n8n.internal.prologapp.com`)
         - traefik.http.routers.n8n-editor.entrypoints=websecure
         - traefik.http.routers.n8n-editor.tls=true
         - traefik.http.routers.n8n-editor.tls.certresolver=le
@@ -97,10 +97,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: internal.n8n.prologapp.com
+      N8N_HOST: n8n.internal.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
-      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://n8n.internal.prologapp.com/"
+      WEBHOOK_URL: "https://n8n.internal.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales"
       N8N_LOG_LEVEL: debug
@@ -138,10 +138,10 @@ services:
       TZ: America/Sao_Paulo
       N8N_DIAGNOSTICS_ENABLED: "false"
       N8N_ENCRYPTION_KEY: "${N8N_ENCRYPTION_KEY}"
-      N8N_HOST: internal.n8n.prologapp.com
+      N8N_HOST: n8n.internal.prologapp.com
       N8N_PROTOCOL: https
-      N8N_EDITOR_BASE_URL: "https://internal.n8n.prologapp.com/"
-      WEBHOOK_URL: "https://internal.n8n.prologapp.com/"
+      N8N_EDITOR_BASE_URL: "https://n8n.internal.prologapp.com/"
+      WEBHOOK_URL: "https://n8n.internal.prologapp.com/"
       NODE_ENV: production
       NODE_FUNCTION_ALLOW_EXTERNAL: "moment,lodash,moment-with-locales,crypto-js,jszip"
       N8N_LOG_LEVEL: debug
